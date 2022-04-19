@@ -32,4 +32,4 @@ a++a, a**a, a&&a, a||a, a^^a
 0b, 0b2, +123
 
 
-zbytek viz [nevalidní testovací sada](src/main/resources/invalidTest.txt)
+zbytek viz [invalidní testovací sada](src/main/resources/invalidTest.txt)
