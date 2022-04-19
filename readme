@@ -20,7 +20,7 @@ ukázka priority:
 - a+a^a => (a+a)^a
 - ~a+a => ~(a+a)
 
-zbytek viz [validní testovací sada](src/main/resources/testValid.txt)
+zbytek viz [validní testovací sada](src/main/resources/validTest.txt)
 
 Špatná syntaxe:
 zdvojení operátorů, kromě operátoru not:
@@ -32,4 +32,4 @@ a++a, a**a, a&&a, a||a, a^^a
 0b, 0b2, +123
 
 
-zbytek viz [nevalidní testovací sada](src/main/resources/testInvalid.txt)
+zbytek viz [nevalidní testovací sada](src/main/resources/invalidTest.txt)
