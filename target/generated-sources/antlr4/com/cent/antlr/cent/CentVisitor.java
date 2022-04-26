@@ -37,4 +37,17 @@ public interface CentVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitOpexpr(CentParser.OpexprContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code errexpr}
+	 * labeled alternative in {@link CentParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitErrexpr(CentParser.ErrexprContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link CentParser#list}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitList(CentParser.ListContext ctx);
 }

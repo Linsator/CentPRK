@@ -17,30 +17,29 @@ public class CentParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, LIST=9, 
-		MINUS=10, WS=11, NEWLINE=12, NONZERODIGIT=13, ZERO=14, DIGIT=15, INT=16, 
-		MINT=17, BINSTART=18, BINDIG=19, BINARY=20;
+		T__0=1, T__1=2, T__2=3, MULTI=4, PLUS=5, AND=6, OR=7, XOR=8, NOT=9, INT=10, 
+		MINT=11, BINARY=12, MINUS=13, BINSTART=14, BINDIG=15, WS=16, NEWLINE=17, 
+		ErrorChar=18;
 	public static final int
-		RULE_root = 0, RULE_expr = 1;
+		RULE_root = 0, RULE_expr = 1, RULE_list = 2;
 	private static String[] makeRuleNames() {
 		return new String[] {
-			"root", "expr"
+			"root", "expr", "list"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
 
 	private static String[] makeLiteralNames() {
 		return new String[] {
-			null, "'('", "')'", "'*'", "'+'", "'&'", "'|'", "'^'", "'~'", null, "'-'", 
-			null, null, null, "'0'"
+			null, "'('", "')'", "'a'", "'*'", "'+'", "'&'", "'|'", "'^'", "'~'", 
+			null, null, null, "'-'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, null, null, null, null, null, null, null, null, "LIST", "MINUS", 
-			"WS", "NEWLINE", "NONZERODIGIT", "ZERO", "DIGIT", "INT", "MINT", "BINSTART", 
-			"BINDIG", "BINARY"
+			null, null, null, null, "MULTI", "PLUS", "AND", "OR", "XOR", "NOT", "INT", 
+			"MINT", "BINARY", "MINUS", "BINSTART", "BINDIG", "WS", "NEWLINE", "ErrorChar"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -123,22 +122,22 @@ public class CentParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(9);
+			setState(9); 
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__0) | (1L << T__7) | (1L << LIST))) != 0)) {
+			do {
 				{
 				{
-				setState(4);
+				setState(6);
 				expr(0);
-				setState(5);
+				setState(7);
 				match(NEWLINE);
 				}
 				}
-				setState(11);
+				setState(11); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-			}
+			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__0) | (1L << T__2) | (1L << NOT) | (1L << INT) | (1L << MINT) | (1L << BINARY))) != 0) );
 			}
 		}
 		catch (RecognitionException re) {
@@ -175,7 +174,9 @@ public class CentParser extends Parser {
 		}
 	}
 	public static class LeafexprContext extends ExprContext {
-		public TerminalNode LIST() { return getToken(CentParser.LIST, 0); }
+		public ListContext list() {
+			return getRuleContext(ListContext.class,0);
+		}
 		public LeafexprContext(ExprContext ctx) { copyFrom(ctx); }
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
@@ -187,16 +188,40 @@ public class CentParser extends Parser {
 		public ExprContext left;
 		public Token operator;
 		public ExprContext right;
+		public TerminalNode NOT() { return getToken(CentParser.NOT, 0); }
 		public List<ExprContext> expr() {
 			return getRuleContexts(ExprContext.class);
 		}
 		public ExprContext expr(int i) {
 			return getRuleContext(ExprContext.class,i);
 		}
+		public TerminalNode MULTI() { return getToken(CentParser.MULTI, 0); }
+		public TerminalNode PLUS() { return getToken(CentParser.PLUS, 0); }
+		public TerminalNode AND() { return getToken(CentParser.AND, 0); }
+		public TerminalNode OR() { return getToken(CentParser.OR, 0); }
+		public TerminalNode XOR() { return getToken(CentParser.XOR, 0); }
 		public OpexprContext(ExprContext ctx) { copyFrom(ctx); }
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof CentVisitor ) return ((CentVisitor<? extends T>)visitor).visitOpexpr(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class ErrexprContext extends ExprContext {
+		public ExprContext left;
+		public Token operator;
+		public ExprContext right;
+		public List<ExprContext> expr() {
+			return getRuleContexts(ExprContext.class);
+		}
+		public ExprContext expr(int i) {
+			return getRuleContext(ExprContext.class,i);
+		}
+		public TerminalNode NOT() { return getToken(CentParser.NOT, 0); }
+		public ErrexprContext(ExprContext ctx) { copyFrom(ctx); }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof CentVisitor ) return ((CentVisitor<? extends T>)visitor).visitErrexpr(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -216,7 +241,7 @@ public class CentParser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(20);
+			setState(21);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case T__0:
@@ -225,39 +250,42 @@ public class CentParser extends Parser {
 				_ctx = _localctx;
 				_prevctx = _localctx;
 
-				setState(13);
-				match(T__0);
 				setState(14);
-				expr(0);
+				match(T__0);
 				setState(15);
+				expr(0);
+				setState(16);
 				match(T__1);
 				}
 				break;
-			case T__7:
+			case NOT:
 				{
 				_localctx = new OpexprContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(17);
-				((OpexprContext)_localctx).operator = match(T__7);
 				setState(18);
-				((OpexprContext)_localctx).right = expr(2);
+				((OpexprContext)_localctx).operator = match(NOT);
+				setState(19);
+				((OpexprContext)_localctx).right = expr(8);
 				}
 				break;
-			case LIST:
+			case T__2:
+			case INT:
+			case MINT:
+			case BINARY:
 				{
 				_localctx = new LeafexprContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(19);
-				match(LIST);
+				setState(20);
+				list();
 				}
 				break;
 			default:
 				throw new NoViableAltException(this);
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(39);
+			setState(43);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,3,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
@@ -265,7 +293,7 @@ public class CentParser extends Parser {
 					if ( _parseListeners!=null ) triggerExitRuleEvent();
 					_prevctx = _localctx;
 					{
-					setState(37);
+					setState(41);
 					_errHandler.sync(this);
 					switch ( getInterpreter().adaptivePredict(_input,2,_ctx) ) {
 					case 1:
@@ -273,11 +301,11 @@ public class CentParser extends Parser {
 						_localctx = new OpexprContext(new ExprContext(_parentctx, _parentState));
 						((OpexprContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(22);
-						if (!(precpred(_ctx, 7))) throw new FailedPredicateException(this, "precpred(_ctx, 7)");
 						setState(23);
-						((OpexprContext)_localctx).operator = match(T__2);
+						if (!(precpred(_ctx, 7))) throw new FailedPredicateException(this, "precpred(_ctx, 7)");
 						setState(24);
+						((OpexprContext)_localctx).operator = match(MULTI);
+						setState(25);
 						((OpexprContext)_localctx).right = expr(8);
 						}
 						break;
@@ -286,11 +314,11 @@ public class CentParser extends Parser {
 						_localctx = new OpexprContext(new ExprContext(_parentctx, _parentState));
 						((OpexprContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(25);
-						if (!(precpred(_ctx, 6))) throw new FailedPredicateException(this, "precpred(_ctx, 6)");
 						setState(26);
-						((OpexprContext)_localctx).operator = match(T__3);
+						if (!(precpred(_ctx, 6))) throw new FailedPredicateException(this, "precpred(_ctx, 6)");
 						setState(27);
+						((OpexprContext)_localctx).operator = match(PLUS);
+						setState(28);
 						((OpexprContext)_localctx).right = expr(7);
 						}
 						break;
@@ -299,11 +327,11 @@ public class CentParser extends Parser {
 						_localctx = new OpexprContext(new ExprContext(_parentctx, _parentState));
 						((OpexprContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(28);
-						if (!(precpred(_ctx, 5))) throw new FailedPredicateException(this, "precpred(_ctx, 5)");
 						setState(29);
-						((OpexprContext)_localctx).operator = match(T__4);
+						if (!(precpred(_ctx, 5))) throw new FailedPredicateException(this, "precpred(_ctx, 5)");
 						setState(30);
+						((OpexprContext)_localctx).operator = match(AND);
+						setState(31);
 						((OpexprContext)_localctx).right = expr(6);
 						}
 						break;
@@ -312,11 +340,11 @@ public class CentParser extends Parser {
 						_localctx = new OpexprContext(new ExprContext(_parentctx, _parentState));
 						((OpexprContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(31);
-						if (!(precpred(_ctx, 4))) throw new FailedPredicateException(this, "precpred(_ctx, 4)");
 						setState(32);
-						((OpexprContext)_localctx).operator = match(T__5);
+						if (!(precpred(_ctx, 4))) throw new FailedPredicateException(this, "precpred(_ctx, 4)");
 						setState(33);
+						((OpexprContext)_localctx).operator = match(OR);
+						setState(34);
 						((OpexprContext)_localctx).right = expr(5);
 						}
 						break;
@@ -325,18 +353,31 @@ public class CentParser extends Parser {
 						_localctx = new OpexprContext(new ExprContext(_parentctx, _parentState));
 						((OpexprContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(34);
-						if (!(precpred(_ctx, 3))) throw new FailedPredicateException(this, "precpred(_ctx, 3)");
 						setState(35);
-						((OpexprContext)_localctx).operator = match(T__6);
+						if (!(precpred(_ctx, 3))) throw new FailedPredicateException(this, "precpred(_ctx, 3)");
 						setState(36);
+						((OpexprContext)_localctx).operator = match(XOR);
+						setState(37);
 						((OpexprContext)_localctx).right = expr(4);
+						}
+						break;
+					case 6:
+						{
+						_localctx = new ErrexprContext(new ExprContext(_parentctx, _parentState));
+						((ErrexprContext)_localctx).left = _prevctx;
+						pushNewRecursionContext(_localctx, _startState, RULE_expr);
+						setState(38);
+						if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
+						setState(39);
+						((ErrexprContext)_localctx).operator = match(NOT);
+						setState(40);
+						((ErrexprContext)_localctx).right = expr(2);
 						}
 						break;
 					}
 					} 
 				}
-				setState(41);
+				setState(45);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,3,_ctx);
 			}
@@ -349,6 +390,87 @@ public class CentParser extends Parser {
 		}
 		finally {
 			unrollRecursionContexts(_parentctx);
+		}
+		return _localctx;
+	}
+
+	public static class ListContext extends ParserRuleContext {
+		public TerminalNode MINT() { return getToken(CentParser.MINT, 0); }
+		public List<TerminalNode> INT() { return getTokens(CentParser.INT); }
+		public TerminalNode INT(int i) {
+			return getToken(CentParser.INT, i);
+		}
+		public TerminalNode BINARY() { return getToken(CentParser.BINARY, 0); }
+		public ListContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_list; }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof CentVisitor ) return ((CentVisitor<? extends T>)visitor).visitList(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final ListContext list() throws RecognitionException {
+		ListContext _localctx = new ListContext(_ctx, getState());
+		enterRule(_localctx, 4, RULE_list);
+		int _la;
+		try {
+			setState(56);
+			_errHandler.sync(this);
+			switch ( getInterpreter().adaptivePredict(_input,5,_ctx) ) {
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(46);
+				match(MINT);
+				}
+				break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(47);
+				match(INT);
+				}
+				break;
+			case 3:
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(48);
+				match(BINARY);
+				}
+				break;
+			case 4:
+				enterOuterAlt(_localctx, 4);
+				{
+				setState(52);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				while (_la==INT) {
+					{
+					{
+					setState(49);
+					match(INT);
+					}
+					}
+					setState(54);
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				}
+				setState(55);
+				match(T__2);
+				}
+				break;
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
 		}
 		return _localctx;
 	}
@@ -372,24 +494,30 @@ public class CentParser extends Parser {
 			return precpred(_ctx, 4);
 		case 4:
 			return precpred(_ctx, 3);
+		case 5:
+			return precpred(_ctx, 1);
 		}
 		return true;
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\26-\4\2\t\2\4\3\t"+
-		"\3\3\2\3\2\3\2\7\2\n\n\2\f\2\16\2\r\13\2\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3"+
-		"\3\5\3\27\n\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3"+
-		"\3\3\7\3(\n\3\f\3\16\3+\13\3\3\3\2\3\4\4\2\4\2\2\2\62\2\13\3\2\2\2\4\26"+
-		"\3\2\2\2\6\7\5\4\3\2\7\b\7\16\2\2\b\n\3\2\2\2\t\6\3\2\2\2\n\r\3\2\2\2"+
-		"\13\t\3\2\2\2\13\f\3\2\2\2\f\3\3\2\2\2\r\13\3\2\2\2\16\17\b\3\1\2\17\20"+
-		"\7\3\2\2\20\21\5\4\3\2\21\22\7\4\2\2\22\27\3\2\2\2\23\24\7\n\2\2\24\27"+
-		"\5\4\3\4\25\27\7\13\2\2\26\16\3\2\2\2\26\23\3\2\2\2\26\25\3\2\2\2\27)"+
-		"\3\2\2\2\30\31\f\t\2\2\31\32\7\5\2\2\32(\5\4\3\n\33\34\f\b\2\2\34\35\7"+
-		"\6\2\2\35(\5\4\3\t\36\37\f\7\2\2\37 \7\7\2\2 (\5\4\3\b!\"\f\6\2\2\"#\7"+
-		"\b\2\2#(\5\4\3\7$%\f\5\2\2%&\7\t\2\2&(\5\4\3\6\'\30\3\2\2\2\'\33\3\2\2"+
-		"\2\'\36\3\2\2\2\'!\3\2\2\2\'$\3\2\2\2(+\3\2\2\2)\'\3\2\2\2)*\3\2\2\2*"+
-		"\5\3\2\2\2+)\3\2\2\2\6\13\26\')";
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\24=\4\2\t\2\4\3\t"+
+		"\3\4\4\t\4\3\2\3\2\3\2\6\2\f\n\2\r\2\16\2\r\3\3\3\3\3\3\3\3\3\3\3\3\3"+
+		"\3\3\3\5\3\30\n\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3"+
+		"\3\3\3\3\3\3\3\3\3\3\7\3,\n\3\f\3\16\3/\13\3\3\4\3\4\3\4\3\4\7\4\65\n"+
+		"\4\f\4\16\48\13\4\3\4\5\4;\n\4\3\4\2\3\4\5\2\4\6\2\2\2F\2\13\3\2\2\2\4"+
+		"\27\3\2\2\2\6:\3\2\2\2\b\t\5\4\3\2\t\n\7\23\2\2\n\f\3\2\2\2\13\b\3\2\2"+
+		"\2\f\r\3\2\2\2\r\13\3\2\2\2\r\16\3\2\2\2\16\3\3\2\2\2\17\20\b\3\1\2\20"+
+		"\21\7\3\2\2\21\22\5\4\3\2\22\23\7\4\2\2\23\30\3\2\2\2\24\25\7\13\2\2\25"+
+		"\30\5\4\3\n\26\30\5\6\4\2\27\17\3\2\2\2\27\24\3\2\2\2\27\26\3\2\2\2\30"+
+		"-\3\2\2\2\31\32\f\t\2\2\32\33\7\6\2\2\33,\5\4\3\n\34\35\f\b\2\2\35\36"+
+		"\7\7\2\2\36,\5\4\3\t\37 \f\7\2\2 !\7\b\2\2!,\5\4\3\b\"#\f\6\2\2#$\7\t"+
+		"\2\2$,\5\4\3\7%&\f\5\2\2&\'\7\n\2\2\',\5\4\3\6()\f\3\2\2)*\7\13\2\2*,"+
+		"\5\4\3\4+\31\3\2\2\2+\34\3\2\2\2+\37\3\2\2\2+\"\3\2\2\2+%\3\2\2\2+(\3"+
+		"\2\2\2,/\3\2\2\2-+\3\2\2\2-.\3\2\2\2.\5\3\2\2\2/-\3\2\2\2\60;\7\r\2\2"+
+		"\61;\7\f\2\2\62;\7\16\2\2\63\65\7\f\2\2\64\63\3\2\2\2\658\3\2\2\2\66\64"+
+		"\3\2\2\2\66\67\3\2\2\2\679\3\2\2\28\66\3\2\2\29;\7\5\2\2:\60\3\2\2\2:"+
+		"\61\3\2\2\2:\62\3\2\2\2:\66\3\2\2\2;\7\3\2\2\2\b\r\27+-\66:";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

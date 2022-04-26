@@ -33,7 +33,7 @@ public class Cent {
             e.printStackTrace();
         }
 
-        System.out.println("Testing invalid expressions");
+        System.out.println("\nTesting invalid expressions");
 
         File invalidFile = new File(basePath+invalidTestPath);
         Scanner invalidFileReader = null;
@@ -50,10 +50,10 @@ public class Cent {
             try {
 
                 line = invalidFileReader.nextLine();
-                calculator.calculate(line);
+                res = calculator.calculate(line);
             }
             catch (Exception e){
-                System.out.println("Expression " + line + " couldn't be processed.");
+                System.out.println("Expression " + line + " couldn't be processed. Exception:" + e.toString());
             }
             System.out.println(line + " = " + res);
         }
@@ -79,9 +79,18 @@ public class Cent {
     }
 
     private String compile(CharStream source) {
+        MyErrorListener errorListener = new MyErrorListener();
+
         CentLexer lexer = new CentLexer(source);
+        lexer.removeErrorListeners();
+        lexer.addErrorListener( errorListener );
+
         CommonTokenStream tokenStream = new CommonTokenStream(lexer);
+
         CentParser parser = new CentParser(tokenStream);
+        parser.removeErrorListeners();
+        parser.addErrorListener( errorListener );
+
         ParseTree tree = parser.expr();
         CentVisitorImpl visitor = new CentVisitorImpl();
         return visitor.visit(tree);

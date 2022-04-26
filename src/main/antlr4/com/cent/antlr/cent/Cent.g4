@@ -6,29 +6,47 @@ grammar Cent;
 // https://www.javahelps.com/2019/04/antlr-hello-world-arithmetic-expression.html
 
 // parser
-root:	(expr NEWLINE)* ;
+root:	(expr NEWLINE)+ ;
 
 expr:   '(' expr ')'                        #parexpr
-	|   left=expr operator='*' right=expr   #opexpr
-    |	left=expr operator='+' right=expr   #opexpr
-    |   left=expr operator='&' right=expr   #opexpr
-    |   left=expr operator='|' right=expr   #opexpr
-    |   left=expr operator='^' right=expr   #opexpr
-    |   operator='~' right=expr             #opexpr
-    | 	LIST                                #leafexpr
+    |   operator=NOT right=expr             #opexpr
+	|   left=expr operator=MULTI right=expr #opexpr
+    |	left=expr operator=PLUS right=expr  #opexpr
+    |   left=expr operator=AND right=expr   #opexpr
+    |   left=expr operator=OR right=expr    #opexpr
+    |   left=expr operator=XOR right=expr   #opexpr
+    | 	list                                #leafexpr
+    |   left=expr operator=NOT right=expr   #errexpr
+    ;
+
+list: MINT
+    | INT
+    | BINARY
+    | (INT)* 'a'
     ;
 
 
 // lexer
-LIST        : MINT | INT | BINARY | 'a';
-MINUS       : '-';
-WS          : [ \t]+ -> skip ; 
-NEWLINE     : [\r\n]+ ;
-NONZERODIGIT: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
-ZERO        : '0';
-DIGIT       : ZERO | NONZERODIGIT;
-INT         : ZERO | NONZERODIGIT DIGIT*;
+//LIST        : MINT | INT | BINARY | (INT)* 'a';
+
+MULTI       : '*';
+PLUS        : '+';
+AND         : '&';
+OR          : '|';
+XOR         : '^';
+NOT         : '~';
+
+
+INT         : (('1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9') ('1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '0')*) | '0';
 MINT        : '-' INT;
+BINARY      : BINSTART BINDIG+;
+
+MINUS       : '-';
+
 BINSTART    : '0B' | '0b';
 BINDIG      : '0' | '1';
-BINARY      : BINSTART BINDIG+;
+
+WS          : [ \t]+ -> skip ;
+NEWLINE     : [\r\n]+ ;
+
+ErrorChar   : . ;
